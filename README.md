@@ -1,2 +1,8 @@
 # chap-chatroom
-chat room with chap auth system
+Gruppen Chatraum mit Chap Auth System
+
+# Technologien
+NodeJs
+
+Bibliothek: ExpressJs (lokaler Server);
+
