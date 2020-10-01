@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const fs = require('fs');
 const hash = require('md5');
 const dk = require('./dk/kit.js')
+const readline = require('readline-sync');
 
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
@@ -34,10 +35,7 @@ app.post('/', function (req, res) {
 })
 
 app.post('/auth', function (req, res) {
-    console.log('request on /auth!');
-    console.log(auths)
     let auth = auths.filter(val => val.hash === req.body.hash);
-    console.log(auth)
     let isAuth = auth.length > 0;
     if (isAuth) {
         res.send('success')
@@ -50,7 +48,6 @@ app.post('/auth', function (req, res) {
 app.post('/chat', function (req, res) {
     chatRoom(req.body.username, chatroomUser, req.body.message)
     res.send('validMessage');
-    console.log(chatRoomMessages)
 })
 
 app.get('/messages', function (req, res) {
@@ -63,6 +60,6 @@ function chatRoom(user, chatroomList, message) {
         chatRoomMessages.push({user: user, message: message})
     }
 }
-
+const port  = readline.question('which port to host? : ')
+app.listen(port)
 console.log('Server Started')
-app.listen(3000)
