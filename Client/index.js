@@ -6,6 +6,7 @@ const password = readline.question('Type in your Password : ', {hideEchoBack: tr
 let chatRunning = false;
 let initialMessageLoad = 0;
 let resLength = 0;
+const globalUrl = readline.question('Type in your base Target Url (as example: http://localhost:3000) : ')
 
 async function getChallenge(url) {
     let res = await axios.post(url, {
@@ -22,7 +23,7 @@ async function postAuth(challenge, url) {
     })
     if (res.data === 'success') {
         if (initialMessageLoad < 1) {
-            let initialChat = await axios.get('http://localhost:3000/messages')
+            let initialChat = await axios.get(`${globalUrl}/messages`)
             if (Array.isArray(initialChat.data))
                 for (let i = 0; i < initialChat.data.length; i++) {
                     console.log(`${initialChat.data[i].user}: ${initialChat.data[i].message}`)
@@ -44,13 +45,12 @@ async function postAuth(challenge, url) {
 
 
 async function getMessages() {
-    let res = await axios.get('http://localhost:3000/messages')
+    let res = await axios.get(`${globalUrl}/messages`)
     let chatArr = [];
     if (res.data.length > resLength) {
         for (let i = resLength; i < res.data.length; i++) {
             chatArr.push(res.data[i]);
         }
-        console.log(chatArr)
     } else {
         chatArr = [...res.data];
     }
@@ -65,7 +65,7 @@ async function getMessages() {
 
 async function postChatMessage() {
     let message = readline.question(`${username}: `);
-    let chatRes = await axios.post('http://localhost:3000/chat', {
+    let chatRes = await axios.post(`${globalUrl}/chat`, {
         message: message,
         username: username
     })
@@ -74,7 +74,7 @@ async function postChatMessage() {
     }
 }
 
-getChallenge('http://localhost:3000')
+getChallenge(`${globalUrl}`)
 
 
 
